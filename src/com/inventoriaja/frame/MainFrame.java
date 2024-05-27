@@ -116,9 +116,6 @@ public class MainFrame extends javax.swing.JFrame {
         ResultSet r6 = Database.executeQuery("SELECT COUNT(*) as total FROM user WHERE role = 'manager'");
         r6.next();
         jLabel18.setText(String.valueOf(r6.getInt("total")));
-
-        
-        
     }
     
     public void fetchTransaksi() throws SQLException {

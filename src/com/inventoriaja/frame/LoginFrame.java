@@ -184,9 +184,10 @@ public class LoginFrame extends javax.swing.JFrame {
             ResultSet result = Database.executeQuery(sql);
             
             if(result.next()) {
+                var user = new User(result.getInt("id"), result.getString("nama"), result.getString("email"), result.getString("password"), result.getString("role"), result.getString("createdAt"));
                 this.setVisible(false);
                 var frame = new MainFrame();
-                frame.currentUser = new User(result.getInt("id"), result.getString("nama"), result.getString("email"), result.getString("password"), result.getString("role"), result.getString("createdAt"));
+                frame.currentUser = user;
                 frame.fetchProfile();
                 frame.setVisible(true);
             } else {
