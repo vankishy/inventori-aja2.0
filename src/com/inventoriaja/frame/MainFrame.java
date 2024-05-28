@@ -6,6 +6,7 @@ package com.inventoriaja.frame;
 
 import com.inventoriaja.core.CabangQuery;
 import com.inventoriaja.core.Database;
+import com.inventoriaja.core.EditBarang;
 import com.inventoriaja.core.DeleteTransaksi;
 import com.inventoriaja.model.Barang;
 import com.inventoriaja.model.Cabang;
@@ -221,8 +222,8 @@ public class MainFrame extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        EditBarang = new javax.swing.JButton();
+        HapusBarang = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
@@ -583,6 +584,11 @@ public class MainFrame extends javax.swing.JFrame {
                 "No", "Kode", "Nama", "Stok", "Harga", "Kategori", "Cabang", "Tanggal Buat"
             }
         ));
+        jTable1.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
+            public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
+                jTable1MouseWheelMoved(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTable1);
 
         jButton4.setText("Tambah Barang");
@@ -592,17 +598,17 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        jButton5.setText("Edit Barang");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        EditBarang.setText("Edit Barang");
+        EditBarang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                EditBarangActionPerformed(evt);
             }
         });
 
-        jButton6.setText("Hapus Barang");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        HapusBarang.setText("Hapus Barang");
+        HapusBarang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                HapusBarangActionPerformed(evt);
             }
         });
 
@@ -623,10 +629,10 @@ public class MainFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(HapusBarang, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(EditBarang, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE))
                 .addGap(36, 36, 36))
         );
@@ -641,8 +647,8 @@ public class MainFrame extends javax.swing.JFrame {
                             .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
-                            .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(EditBarang, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
+                            .addComponent(HapusBarang, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(25, 25, 25)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -897,9 +903,17 @@ public class MainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void EditBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditBarangActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
+        int row = jTable1.getSelectedRow();
+        int column = jTable1.getSelectedColumn();
+        String value = jTable1.getModel().getValueAt(row, column).toString();
+        
+        EditBarangFrame editBarangFrame = new EditBarangFrame(value);
+        
+        editBarangFrame.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
+        editBarangFrame.setVisible(true);
+    }//GEN-LAST:event_EditBarangActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         try {
@@ -1017,12 +1031,12 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void HapusBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HapusBarangActionPerformed
         // TODO add your handling code here:
         HapusBarangFrame hapusBarangFrame = new HapusBarangFrame();
         hapusBarangFrame.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
         hapusBarangFrame.setVisible(true);
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_HapusBarangActionPerformed
 
     // debug console
     private void jTable5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable5MouseClicked
@@ -1043,6 +1057,10 @@ public class MainFrame extends javax.swing.JFrame {
         String value = jTable2.getModel().getValueAt(row, column).toString();
         System.out.println(value);
     }//GEN-LAST:event_jTable2MouseClicked
+
+    private void jTable1MouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_jTable1MouseWheelMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTable1MouseWheelMoved
 
 
     /**
@@ -1086,6 +1104,8 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton EditBarang;
+    private javax.swing.JButton HapusBarang;
     private javax.swing.JButton deleteTransaksiButton;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
@@ -1097,8 +1117,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton21;
     private javax.swing.JButton jButton23;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
