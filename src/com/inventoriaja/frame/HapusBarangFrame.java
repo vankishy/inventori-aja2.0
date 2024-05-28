@@ -6,6 +6,7 @@ package com.inventoriaja.frame;
 import javax.swing.JOptionPane; 
 import java.sql.*;
 import com.inventoriaja.core.Database;
+import static com.inventoriaja.core.Database.conn;
 /**
  *
  * @author wilda
@@ -104,14 +105,32 @@ public class HapusBarangFrame extends javax.swing.JFrame {
         int response = JOptionPane.showConfirmDialog(this, "Apakah Anda yakin ingin menghapus barang ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
         if (response == JOptionPane.YES_OPTION) {
-            //hapusBarang(kodeBarang);
+            HapusBarang(kodeBarang);
         }
     }//GEN-LAST:event_HapusButtonActionPerformed
     
-    private void HapusBarang(){
-        String kodeBarang = jTextField1.getText();
-        String sql = "DELETE FROM barang WHERE kode = ?";
-        PreparedStatement stmt = Database.execute(sql);
+    private void HapusBarang(String kodeBarang){
+        try{
+            Connection conn = DriverManager.getConnection("jdbc:mysql://103.161.184.223/inventoriaja", "inventoriaja", "inventoriaja");
+            String sql = "DELETE FROM barang WHERE kode = ?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, kodeBarang);
+            
+            int affectedRows = pst.executeUpdate();
+            if (affectedRows > 0) {
+                JOptionPane.showMessageDialog(this, "Barang berhasil dihapus.", "Sukses", JOptionPane.INFORMATION_MESSAGE);
+
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Barang tidak ditemukan.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+            pst.close();
+            conn.close();
+        }catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat menghapus data.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     /**
