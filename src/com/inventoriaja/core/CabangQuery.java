@@ -17,6 +17,20 @@ import java.util.logging.Logger;
  */
 public class CabangQuery {
     
+    public static boolean deleteCabang(int id) {
+        String sql = "DELETE FROM cabang WHERE id=?";
+        try {
+            PreparedStatement stmt = Database.executePrepareStmt(sql);
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            Logger.getLogger(CabangQuery.class.getName()).log(Level.SEVERE, "Error updating data", e);
+        }
+        
+        return false;
+    }
+    
     public static Cabang getCabangById(int id) {
         String sql = "SELECT * FROM cabang WHERE id=?";
         try {

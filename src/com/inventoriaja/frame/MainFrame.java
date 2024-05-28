@@ -19,6 +19,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -159,7 +160,7 @@ public class MainFrame extends javax.swing.JFrame {
                 currentCabang = new Cabang(result.getInt("id"), result.getString("nama"), result.getString("alamat"), result.getString("nohp"), result.getString("createdAt"));
             }     
             cabang.add(new Cabang(result.getInt("id"), result.getString("nama"), result.getString("alamat"), result.getString("nohp"), result.getString("createdAt")));
-            cabangTableModel.addRow(new Object[] { String.valueOf(i), result.getString("nama"), result.getString("alamat"), result.getString("nohp"), result.getString("createdAt") });
+            cabangTableModel.addRow(new Object[] { result.getInt("id"), result.getString("nama"), result.getString("alamat"), result.getString("nohp"), result.getString("createdAt") });
             comboBoxItems.add(result.getString("nama"));
             i++;
         }
@@ -964,6 +965,19 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
         // TODO add your handling code here:
+        int column = jTable2.getSelectedColumn();
+        int row = jTable2.getSelectedRow();
+        System.out.println("column: " + column);
+        System.out.println("row: " + row);
+        String value = jTable2.getModel().getValueAt(row, column).toString();
+        System.out.println(value);
+        boolean status = CabangQuery.deleteCabang(Integer.parseInt(value));
+        if (status) {
+            JOptionPane.showMessageDialog(this, "Berhasil menghapus cabang");
+            jTable2.removeAll();
+        } else {
+            JOptionPane.showMessageDialog(this, "Gagal menghapus cabang");
+        }
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
