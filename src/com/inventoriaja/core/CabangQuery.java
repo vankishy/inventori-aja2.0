@@ -17,22 +17,6 @@ import java.util.logging.Logger;
  */
 public class CabangQuery {
     
-    public static int getCabangId(int id) {
-        try {
-            String sql = "SELECT * FROM cabang WHERE id=?";
-            PreparedStatement stmt = Database.executePrepareStmt(sql);
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                int idCabang = rs.getInt("id");
-                return idCabang;
-            }
-        } catch (SQLException e) {
-            System.out.println("Error Get Cabang Id:" + e.getMessage());
-        }
-        return 0;
-    }
-    
     public static Cabang getCabangById(int id) {
         try {
             String sql = "SELECT * FROM cabang WHERE id=?";
