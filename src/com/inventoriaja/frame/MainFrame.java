@@ -127,7 +127,7 @@ public class MainFrame extends javax.swing.JFrame {
         int i = 1;
         while(result.next()) {
             transaksi.add(new Transaksi(result.getInt("id"), result.getInt("barang_id"), result.getInt("user_id"), result.getString("tipe"), result.getInt("stok"), result.getString("createdAt")));
-            transaksiTableModel.addRow(new Object[] { String.valueOf(i), result.getInt("id"), result.getString("barang"), result.getString("user"), result.getString("tipe"), result.getInt("stok"), result.getString("createdAt") });
+            transaksiTableModel.addRow(new Object[] { String.valueOf(i), result.getString("barang"), result.getString("user"), result.getString("tipe"), result.getInt("stok"), result.getString("createdAt") });
             i++;
         }
     }
