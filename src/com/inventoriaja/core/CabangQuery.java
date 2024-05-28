@@ -18,8 +18,8 @@ import java.util.logging.Logger;
 public class CabangQuery {
     
     public static Cabang getCabangById(int id) {
+        String sql = "SELECT * FROM cabang WHERE id=?";
         try {
-            String sql = "SELECT * FROM cabang WHERE id=?";
             PreparedStatement stmt = Database.executePrepareStmt(sql);
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
