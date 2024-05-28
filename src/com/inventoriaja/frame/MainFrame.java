@@ -4,6 +4,7 @@
  */
 package com.inventoriaja.frame;
 
+import com.inventoriaja.core.CabangQuery;
 import com.inventoriaja.core.Database;
 import com.inventoriaja.core.DeleteTransaksi;
 import com.inventoriaja.model.Barang;
@@ -155,7 +156,7 @@ public class MainFrame extends javax.swing.JFrame {
         while(result.next()) {
             if(i == 1) {
                 currentCabang = new Cabang(result.getInt("id"), result.getString("nama"), result.getString("alamat"), result.getString("nohp"), result.getString("createdAt"));
-            }
+            }     
             cabang.add(new Cabang(result.getInt("id"), result.getString("nama"), result.getString("alamat"), result.getString("nohp"), result.getString("createdAt")));
             cabangTableModel.addRow(new Object[] { String.valueOf(i), result.getString("nama"), result.getString("alamat"), result.getString("nohp"), result.getString("createdAt") });
             comboBoxItems.add(result.getString("nama"));
@@ -526,6 +527,11 @@ public class MainFrame extends javax.swing.JFrame {
                 "No", "Nama", "Alamat", "NoHp", "Tanggal Buat"
             }
         ));
+        jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable2MouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(jTable2);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -909,6 +915,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         try {
+            jTable2.removeAll();
             fetchCabang();
         } catch (SQLException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -921,7 +928,19 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+
         // TODO add your handling code here:
+        int column = jTable2.getSelectedColumn();
+        int row = jTable2.getSelectedRow();
+        System.out.println("column: " + column);
+        System.out.println("row: " + row);
+        String value = jTable2.getModel().getValueAt(row, column).toString();
+        System.out.println(value);
+        EditCabangFrame frame = new EditCabangFrame(Integer.parseInt(value));
+        Cabang cabang = CabangQuery.getCabangById(Integer.parseInt(value));
+        if (cabang != null) {
+            frame.setVisible(true);
+        }
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
@@ -1002,6 +1021,16 @@ public class MainFrame extends javax.swing.JFrame {
         String value = jTable5.getModel().getValueAt(row, column).toString();
         System.out.println(value);
     }//GEN-LAST:event_jTable5MouseClicked
+
+    private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
+        // TODO add your handling code here:
+        int column = jTable2.getSelectedColumn();
+        int row = jTable2.getSelectedRow();
+        System.out.println("column: " + column);
+        System.out.println("row: " + row);
+        String value = jTable2.getModel().getValueAt(row, column).toString();
+        System.out.println(value);
+    }//GEN-LAST:event_jTable2MouseClicked
 
     /**
      * @param args the command line arguments

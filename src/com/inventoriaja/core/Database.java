@@ -29,12 +29,16 @@ public class Database {
         conn = DriverManager.getConnection("jdbc:mysql://103.161.184.223/inventoriaja", "inventoriaja", "inventoriaja");
         stmt = conn.createStatement();
     }
-    
+        
     public static ResultSet executeQuery(String sql) throws SQLException {
         return stmt.executeQuery(sql);
     }
     
     public static boolean execute(String sql) throws SQLException {
         return stmt.execute(sql);
+    }
+    
+    public static PreparedStatement executePrepareStmt(String sql) throws SQLException {
+        return conn.prepareStatement(sql);
     }
 }
