@@ -671,11 +671,6 @@ public class MainFrame extends javax.swing.JFrame {
                 "No", "Barang", "Stok", "Tipe", "User", "Tanggal Transaksi"
             }
         ));
-        jTable5.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTable5MouseClicked(evt);
-            }
-        });
         jScrollPane6.setViewportView(jTable5);
 
         jButton20.setText("Tambah");
@@ -1024,7 +1019,7 @@ public class MainFrame extends javax.swing.JFrame {
         int row = jTable5.getSelectedRow();
         String value = jTable5.getModel().getValueAt(row, column).toString();
         DeleteTransaksi.deleteData(value);
-        System.out.println("Jejak id yang dihapus: " + value); //debug console
+        System.out.println("Jejak id yang dihapus: " + value); //debug console       
     }//GEN-LAST:event_deleteTransaksiButtonActionPerformed
 
     private void jButton23ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton23ActionPerformed
@@ -1052,18 +1047,7 @@ public class MainFrame extends javax.swing.JFrame {
         hapusBarangFrame.setVisible(true);
     }//GEN-LAST:event_HapusBarangActionPerformed
 
-    // debug console
-    private void jTable5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable5MouseClicked
-        int column = jTable5.getSelectedColumn();
-        int row = jTable5.getSelectedRow();
-        System.out.println("column: " + column);
-        System.out.println("row: " + row);
-        String value = jTable5.getModel().getValueAt(row, column).toString();
-        System.out.println(value);
-    }//GEN-LAST:event_jTable5MouseClicked
-
     private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
-        // TODO add your handling code here:
         int column = jTable2.getSelectedColumn();
         int row = jTable2.getSelectedRow();
         System.out.println("column: " + column);

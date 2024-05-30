@@ -19,7 +19,7 @@ public class DeleteTransaksi {
     
     public static void deleteData(String value) {
         try {
-            Database.execute("DELETE FROM transaksi WHERE id = " + value + ";");
+            Database.execute("DELETE FROM transaksi WHERE createdAt = '"+ value +"';");
             JOptionPane.showMessageDialog(null, "Data telah berhasil dihapus", "Message", JOptionPane.WARNING_MESSAGE);
         } catch (SQLException ex) {
             System.out.println(ex);
