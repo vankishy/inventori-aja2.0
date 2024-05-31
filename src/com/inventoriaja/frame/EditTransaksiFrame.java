@@ -11,6 +11,7 @@ import com.inventoriaja.model.Cabang;
 import com.inventoriaja.model.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -33,14 +34,17 @@ public class EditTransaksiFrame extends javax.swing.JFrame {
     
     public User user;
     public int cabangId;
+    private String val;
     
     /**
      * Creates new form EditTransaksi
      */
-    public EditTransaksiFrame() throws SQLException {
+    public EditTransaksiFrame(String val) throws SQLException {
         initComponents();
+        this.val = val;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         initCombobox();
+        fillTrx();
     }
     
     public void initCombobox() throws SQLException {
@@ -54,7 +58,7 @@ public class EditTransaksiFrame extends javax.swing.JFrame {
         }
         
         final DefaultComboBoxModel model = new DefaultComboBoxModel(comboBoxItems);
-        jComboBoxBrg.setModel(model);
+        jComboBoxTrx.setModel(model);
     }
 
     /**
@@ -66,22 +70,23 @@ public class EditTransaksiFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup2 = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
-        jComboBoxBrg = new javax.swing.JComboBox<>();
+        jComboBoxTrx = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jSpinner2 = new javax.swing.JSpinner();
         jLabel4 = new javax.swing.JLabel();
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
-        jButtonUpdate = new javax.swing.JButton();
+        saveBtnTrx = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(471, 380));
 
         jLabel1.setText("Edit Transaksi");
 
-        jComboBoxBrg.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxTrx.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel5.setText("Barang");
 
@@ -89,14 +94,16 @@ public class EditTransaksiFrame extends javax.swing.JFrame {
 
         jLabel4.setText("Tipe");
 
+        buttonGroup2.add(jRadioButton1);
         jRadioButton1.setText("Masuk");
 
+        buttonGroup2.add(jRadioButton2);
         jRadioButton2.setText("Keluar");
 
-        jButtonUpdate.setText("Update");
-        jButtonUpdate.addActionListener(new java.awt.event.ActionListener() {
+        saveBtnTrx.setText("Update");
+        saveBtnTrx.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonUpdateActionPerformed(evt);
+                saveBtnTrxActionPerformed(evt);
             }
         });
 
@@ -131,9 +138,9 @@ public class EditTransaksiFrame extends javax.swing.JFrame {
                             .addGap(4, 4, 4)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jComboBoxBrg, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jComboBoxTrx, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButtonUpdate)
+                        .addComponent(saveBtnTrx)
                         .addGap(192, 192, 192))))
         );
         layout.setVerticalGroup(
@@ -143,7 +150,7 @@ public class EditTransaksiFrame extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(65, 65, 65)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBoxBrg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxTrx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -155,18 +162,18 @@ public class EditTransaksiFrame extends javax.swing.JFrame {
                     .addComponent(jRadioButton2)
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 78, Short.MAX_VALUE)
-                .addComponent(jButtonUpdate)
+                .addComponent(saveBtnTrx)
                 .addGap(48, 48, 48))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpdateActionPerformed
+    private void saveBtnTrxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtnTrxActionPerformed
         try {
             int stok = (int) jSpinner2.getValue();
-            int barangId = barang.get(jComboBoxBrg.getSelectedIndex()).getId();
-            String tipe = SwingHelper.getSelectedButtonText(buttonGroup1);
+            int barangId = barang.get(jComboBoxTrx.getSelectedIndex()).getId();
+            String tipe = SwingHelper.getSelectedButtonText(buttonGroup2);
 
             Database.execute("INSERT INTO transaksi (barang_id, user_id, tipe, stok) VALUES('"+ barangId +"', '"+ user.getId() +"', '"+ tipe +"', '"+ stok +"')");
 
@@ -175,7 +182,37 @@ public class EditTransaksiFrame extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(TambahTransaksiFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButtonUpdateActionPerformed
+    }//GEN-LAST:event_saveBtnTrxActionPerformed
+    
+    private void fillTrx() {
+        try {
+            PreparedStatement stmt = Database.executePrepareStmt("SELECT barang_id FROM transaksi WHERE createdAt = '" + val + "';");
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                PreparedStatement stmt2 = Database.executePrepareStmt("SELECT b.nama, t.stok, t.tipe FROM transaksi t "
+                        + "JOIN barang b ON t.barang_id = b.id "
+                        + "WHERE b.id = '" + rs.getInt("barang_id") + "' AND t.createdAt = '" + val + "';");
+                ResultSet rs2 = stmt2.executeQuery();
+                if (rs2.next()) {
+                    String barang = rs2.getString("nama");
+                    int stok = rs2.getInt("stok");
+                    String tipe = rs2.getString("tipe");
+                    jComboBoxTrx.setSelectedItem(barang);
+                    jSpinner2.setValue(stok);
+                    
+                    if (tipe.equals("masuk")) {
+                        jRadioButton1.setSelected(true);
+                        jRadioButton2.setSelected(false);
+                    } else if (tipe.equals("keluar")) {
+                        jRadioButton2.setSelected(true);
+                        jRadioButton1.setSelected(false);
+                    }                
+                }             
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -206,16 +243,16 @@ public class EditTransaksiFrame extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new EditTransaksiFrame().setVisible(true);
-            }
-        });
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new EditTransaksiFrame().setVisible(true);
+//            }
+//        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonUpdate;
-    private javax.swing.JComboBox<String> jComboBoxBrg;
+    private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.JComboBox<String> jComboBoxTrx;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -223,5 +260,6 @@ public class EditTransaksiFrame extends javax.swing.JFrame {
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JSpinner jSpinner2;
+    private javax.swing.JButton saveBtnTrx;
     // End of variables declaration//GEN-END:variables
 }
