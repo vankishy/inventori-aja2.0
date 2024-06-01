@@ -173,11 +173,13 @@ public class EditTransaksiFrame extends javax.swing.JFrame {
             int stok = (int) jSpinner2.getValue();
             int barangId = barang.get(jComboBoxTrx.getSelectedIndex()).getId();
             String tipe = SwingHelper.getSelectedButtonText(buttonGroup2);
-
-            Database.execute("UPDATE transaksi SET barang_id = '"+barangId+"', tipe = '"+tipe+"', stok '"+stok+"' "
+            
+            PreparedStatement stmt = Database.executePrepareStmt("UPDATE transaksi SET barang_id = "+barangId+", tipe = '"+tipe+"', stok = "+stok+" "
                     + "WHERE createdAt = '"+val+"';");
+            stmt.executeUpdate();
 
             JOptionPane.showMessageDialog(null, "Transaksi telah di update", "Berhasil", JOptionPane.WARNING_MESSAGE);
+            stmt.close();
             this.setVisible(false);
         } catch (SQLException ex) {
             Logger.getLogger(TambahTransaksiFrame.class.getName()).log(Level.SEVERE, null, ex);
