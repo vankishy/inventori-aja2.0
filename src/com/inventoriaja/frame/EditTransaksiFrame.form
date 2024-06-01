@@ -72,7 +72,7 @@
                       </Group>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
-                      <Component id="saveBtnTrx" min="-2" max="-2" attributes="0"/>
+                      <Component id="updateBtnTrx" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="192" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -101,7 +101,7 @@
                   <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="78" max="32767" attributes="0"/>
-              <Component id="saveBtnTrx" min="-2" max="-2" attributes="0"/>
+              <Component id="updateBtnTrx" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -161,12 +161,12 @@
         <Property name="text" type="java.lang.String" value="Keluar"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="saveBtnTrx">
+    <Component class="javax.swing.JButton" name="updateBtnTrx">
       <Properties>
         <Property name="text" type="java.lang.String" value="Update"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveBtnTrxActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="updateBtnTrxActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

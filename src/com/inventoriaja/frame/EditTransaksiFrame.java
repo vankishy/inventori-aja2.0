@@ -20,7 +20,6 @@ import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -35,6 +34,7 @@ public class EditTransaksiFrame extends javax.swing.JFrame {
     public User user;
     public int cabangId;
     private String val;
+    DefaultComboBoxModel model = new DefaultComboBoxModel();
     
     /**
      * Creates new form EditTransaksi
@@ -56,8 +56,7 @@ public class EditTransaksiFrame extends javax.swing.JFrame {
             barang.add(new Barang(result.getInt("id"), result.getString("kode"), result.getString("nama"), result.getString("kategori"), result.getInt("stok"), result.getInt("harga"), result.getInt("cabang_id"), result.getString("createdAt")));
             comboBoxItems.add(result.getString("nama"));
         }
-        
-        final DefaultComboBoxModel model = new DefaultComboBoxModel(comboBoxItems);
+        model.addAll(comboBoxItems);
         jComboBoxTrx.setModel(model);
     }
 
@@ -79,7 +78,7 @@ public class EditTransaksiFrame extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
-        saveBtnTrx = new javax.swing.JButton();
+        updateBtnTrx = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(471, 380));
@@ -100,10 +99,10 @@ public class EditTransaksiFrame extends javax.swing.JFrame {
         buttonGroup2.add(jRadioButton2);
         jRadioButton2.setText("Keluar");
 
-        saveBtnTrx.setText("Update");
-        saveBtnTrx.addActionListener(new java.awt.event.ActionListener() {
+        updateBtnTrx.setText("Update");
+        updateBtnTrx.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveBtnTrxActionPerformed(evt);
+                updateBtnTrxActionPerformed(evt);
             }
         });
 
@@ -140,7 +139,7 @@ public class EditTransaksiFrame extends javax.swing.JFrame {
                                 .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jComboBoxTrx, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(saveBtnTrx)
+                        .addComponent(updateBtnTrx)
                         .addGap(192, 192, 192))))
         );
         layout.setVerticalGroup(
@@ -162,27 +161,28 @@ public class EditTransaksiFrame extends javax.swing.JFrame {
                     .addComponent(jRadioButton2)
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 78, Short.MAX_VALUE)
-                .addComponent(saveBtnTrx)
+                .addComponent(updateBtnTrx)
                 .addGap(48, 48, 48))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void saveBtnTrxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtnTrxActionPerformed
+    private void updateBtnTrxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBtnTrxActionPerformed
         try {
             int stok = (int) jSpinner2.getValue();
             int barangId = barang.get(jComboBoxTrx.getSelectedIndex()).getId();
             String tipe = SwingHelper.getSelectedButtonText(buttonGroup2);
 
-            Database.execute("INSERT INTO transaksi (barang_id, user_id, tipe, stok) VALUES('"+ barangId +"', '"+ user.getId() +"', '"+ tipe +"', '"+ stok +"')");
+            Database.execute("UPDATE transaksi SET barang_id = '"+barangId+"', tipe = '"+tipe+"', stok '"+stok+"' "
+                    + "WHERE createdAt = '"+val+"';");
 
-            JOptionPane.showMessageDialog(null, "Berhasil Menambahkan data", "Berhasil", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Transaksi telah di update", "Berhasil", JOptionPane.WARNING_MESSAGE);
             this.setVisible(false);
         } catch (SQLException ex) {
             Logger.getLogger(TambahTransaksiFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_saveBtnTrxActionPerformed
+    }//GEN-LAST:event_updateBtnTrxActionPerformed
     
     private void fillTrx() {
         try {
@@ -197,7 +197,7 @@ public class EditTransaksiFrame extends javax.swing.JFrame {
                     String barang = rs2.getString("nama");
                     int stok = rs2.getInt("stok");
                     String tipe = rs2.getString("tipe");
-                    jComboBoxTrx.setSelectedItem(barang);
+                    model.setSelectedItem(barang);
                     jSpinner2.setValue(stok);
                     
                     if (tipe.equals("masuk")) {
@@ -206,9 +206,11 @@ public class EditTransaksiFrame extends javax.swing.JFrame {
                     } else if (tipe.equals("keluar")) {
                         jRadioButton2.setSelected(true);
                         jRadioButton1.setSelected(false);
-                    }                
-                }             
+                    }
+                }
+                rs2.close();
             }
+            rs.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -260,6 +262,6 @@ public class EditTransaksiFrame extends javax.swing.JFrame {
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JSpinner jSpinner2;
-    private javax.swing.JButton saveBtnTrx;
+    private javax.swing.JButton updateBtnTrx;
     // End of variables declaration//GEN-END:variables
 }
