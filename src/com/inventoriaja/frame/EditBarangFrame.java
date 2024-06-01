@@ -23,7 +23,8 @@ public class EditBarangFrame extends javax.swing.JFrame {
     private String kodeBarang;
     
     public EditBarangFrame(String kode) {
-        initComponents(); 
+        initComponents();
+        setTitle("Edit barang");
         this.kodeBarang = kode;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         fullFillData();

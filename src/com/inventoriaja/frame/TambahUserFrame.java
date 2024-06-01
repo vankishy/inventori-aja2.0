@@ -23,6 +23,7 @@ public class TambahUserFrame extends javax.swing.JFrame {
      */
     public TambahUserFrame() {
         initComponents();
+        setTitle("Tambah Pengguna");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 

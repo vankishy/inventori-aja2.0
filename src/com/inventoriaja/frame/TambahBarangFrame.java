@@ -35,6 +35,7 @@ public class TambahBarangFrame extends javax.swing.JFrame {
      */
     public TambahBarangFrame() throws SQLException {
         initComponents();
+        setTitle("Tambah Barang");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         initCombobox();
     }

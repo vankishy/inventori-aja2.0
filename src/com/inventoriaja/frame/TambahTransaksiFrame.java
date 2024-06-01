@@ -39,6 +39,7 @@ public class TambahTransaksiFrame extends javax.swing.JFrame {
      */
     public TambahTransaksiFrame() throws SQLException {
         initComponents();
+        setTitle("Tambah Transaksi");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         initCombobox();
     }

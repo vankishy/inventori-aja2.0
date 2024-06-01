@@ -18,6 +18,7 @@ public class HapusBarangFrame extends javax.swing.JFrame {
      */
     public HapusBarangFrame() {
         initComponents();
+        setTitle("Hapus Barang");
     }
 
     /**

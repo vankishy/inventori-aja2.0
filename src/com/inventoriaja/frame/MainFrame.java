@@ -50,6 +50,7 @@ public class MainFrame extends javax.swing.JFrame {
      */
     public MainFrame() throws SQLException {
         initComponents();
+        setTitle("Inventori Aja");
         
         database = Database.getInstance();
         
@@ -130,7 +131,7 @@ public class MainFrame extends javax.swing.JFrame {
         int i = 1;
         while(result.next()) {
             transaksi.add(new Transaksi(result.getInt("id"), result.getInt("barang_id"), result.getInt("user_id"), result.getString("tipe"), result.getInt("stok"), result.getString("createdAt")));
-            transaksiTableModel.addRow(new Object[] { String.valueOf(i), result.getString("barang"), result.getString("user"), result.getString("tipe"), result.getInt("stok"), result.getString("createdAt") });
+            transaksiTableModel.addRow(new Object[] { String.valueOf(i), result.getString("barang"), result.getInt("stok"), result.getString("tipe"), result.getString("user"), result.getString("createdAt") });
             i++;
         }
     }
@@ -1033,7 +1034,12 @@ public class MainFrame extends javax.swing.JFrame {
         int column = jTable5.getSelectedColumn();
         int row = jTable5.getSelectedRow();
         String value = jTable5.getModel().getValueAt(row, column).toString();
-        DeleteTransaksi.deleteData(value);
+        int res = JOptionPane.showConfirmDialog(this, "Apakah Anda yakin ingin menghapus transaksi ini?", "Hapus", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        
+        if (res == JOptionPane.YES_OPTION) {
+            DeleteTransaksi.deleteData(value);
+        }
+        
         System.out.println("Jejak id yang dihapus: " + value); //debug console       
     }//GEN-LAST:event_deleteTransaksiButtonActionPerformed
 

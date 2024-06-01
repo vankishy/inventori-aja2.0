@@ -41,6 +41,7 @@ public class EditTransaksiFrame extends javax.swing.JFrame {
      */
     public EditTransaksiFrame(String val) throws SQLException {
         initComponents();
+        setTitle("Edit Transaksi");
         this.val = val;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         initCombobox();

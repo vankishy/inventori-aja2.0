@@ -24,6 +24,7 @@ public class EditCabangFrame extends javax.swing.JFrame {
      */
     public EditCabangFrame(int id) {
         initComponents();
+        setTitle("Edit Cabang");
         this.idCabang = id;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
         fullFillData();

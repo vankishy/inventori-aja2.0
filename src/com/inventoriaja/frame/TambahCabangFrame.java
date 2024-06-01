@@ -23,6 +23,7 @@ public class TambahCabangFrame extends javax.swing.JFrame {
      */
     public TambahCabangFrame() {
         initComponents();
+        setTitle("Tambah Cabang");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
