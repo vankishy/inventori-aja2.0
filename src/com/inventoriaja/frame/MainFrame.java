@@ -8,6 +8,7 @@ import com.inventoriaja.core.CabangQuery;
 import com.inventoriaja.core.Database;
 import com.inventoriaja.core.EditBarang;
 import com.inventoriaja.core.DeleteTransaksi;
+import com.inventoriaja.core.DeleteUser;
 import com.inventoriaja.model.Barang;
 import com.inventoriaja.model.Cabang;
 import com.inventoriaja.model.Transaksi;
@@ -992,10 +993,31 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
         // TODO add your handling code here:
+        // EDIT BUTTON
+        int row = jTable3.getSelectedRow();
+        int column = jTable3.getSelectedColumn();
+        String value = jTable3.getModel().getValueAt(row, column).toString();
+        
+        EditUserFrame editUser = new EditUserFrame(value);
+        
+        editUser.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
+        editUser.setVisible(true);
     }//GEN-LAST:event_jButton14ActionPerformed
 
     private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
         // TODO add your handling code here:
+        // HAPUS BUTTON
+  
+        int column = jTable3.getSelectedColumn();
+        int row = jTable3.getSelectedRow();
+        String value = jTable3.getModel().getValueAt(row, column).toString();
+        int res = JOptionPane.showConfirmDialog(this, "Apakah Anda yakin ingin menghapus User ini?", "Hapus", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        
+        if (res == JOptionPane.YES_OPTION) {
+            DeleteUser.deleteUser(value);
+        }
+        
+        System.out.println("Jejak id yang dihapus: " + value); //debug console 
     }//GEN-LAST:event_jButton15ActionPerformed
 
     private void jButton20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton20ActionPerformed
