@@ -68,7 +68,7 @@ public class TambahUserFrame extends javax.swing.JFrame {
 
         jLabel6.setText("Nama");
 
-        jLabel4.setText("Password");
+        jLabel4.setText("Role");
 
         buttonGroup1.add(jRadioButton1);
         jRadioButton1.setText("Admin");

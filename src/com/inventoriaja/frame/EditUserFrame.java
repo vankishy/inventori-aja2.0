@@ -5,15 +5,10 @@
 package com.inventoriaja.frame;
 
 import com.inventoriaja.core.Database;
-import com.inventoriaja.core.EditBarang;
 import com.inventoriaja.core.EditUser;
 import com.inventoriaja.core.SwingHelper;
-import com.inventoriaja.model.User;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -26,13 +21,13 @@ public class EditUserFrame extends javax.swing.JFrame {
     /**
      * Creates new form EditUserFrame
      */
-    private String User;
-    public EditUserFrame(String User) {
+    private int idUser;
+    public EditUserFrame(int id) {
         initComponents();
         setTitle("Edit barang");
-        this.User = User;
+        this.idUser = id;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//        fullFillData();
+        fullFillData();
     }
 
     /**
@@ -60,7 +55,13 @@ public class EditUserFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("Submit");
+        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField2ActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Update");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -75,7 +76,7 @@ public class EditUserFrame extends javax.swing.JFrame {
             }
         });
 
-        jLabel4.setText("Password");
+        jLabel4.setText("Role");
 
         buttonGroup1.add(jRadioButton1);
         jRadioButton1.setText("Admin");
@@ -166,23 +167,16 @@ public class EditUserFrame extends javax.swing.JFrame {
         
         String nama = jTextField1.getText();
         String email = jTextField2.getText();
-        String password = new String(jPasswordField1.getPassword());
+        String password = jPasswordField1.getSelectedText();
         String role = SwingHelper.getSelectedButtonText(buttonGroup1);
+        boolean status = EditUser.updateUser(idUser, nama, email, password, role);
         
-        jTextField1.setText("");
-        jTextField2.setText("");
-        jPasswordField1.setText("");
-        buttonGroup1.clearSelection();
-                
-        if (nama.isEmpty() || password.isEmpty() || email.isEmpty() || role.isEmpty()){
-            JOptionPane.showMessageDialog(this, "Semua field harus diisi.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
+        if (status) {
+            JOptionPane.showMessageDialog(this, "Berhasil");
+        } else {
+            JOptionPane.showMessageDialog(this, "Gagal");
         }
-        
-        int response = JOptionPane.showConfirmDialog(this, "Apakah Anda yakin ingin mengupdate user ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-        if (response == JOptionPane.YES_OPTION) {
-            EditUser.updateUser(nama, email, password, role);
-        }  
+        this.dispose();  
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -193,6 +187,10 @@ public class EditUserFrame extends javax.swing.JFrame {
     private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jPasswordField1ActionPerformed
+
+    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -229,27 +227,26 @@ public class EditUserFrame extends javax.swing.JFrame {
 //        });
 //    }
     
-//    private void fullFillData() {
-//        
-//        try {
-//            String sql = "SELECT * FROM barang WHERE kode=?";
-//            PreparedStatement stmt = Database.executePrepareStmt(sql);
-//            stmt.setString(1, kodeBarang);
-//            ResultSet rs = stmt.executeQuery();
-//            if (rs.next()) {
-//                String nama = rs.getString("nama");
-//                String kategori = rs.getString("kategori");
-//                int harga = rs.getInt("harga");
-//                int stok = rs.getInt("stok");
-//                NamaField.setText(nama);
-//                HargaField.setText(Integer.toString(harga));
-//                StokSpinner.setValue(stok);
-////                PakaianOption
-//            }
-//        } catch (Exception e) {
-//            System.out.println("Error Full Fill Data :" + e.getMessage());
-//        }    
-//    }
+    private void fullFillData() {
+        try {
+            String sql = "SELECT * FROM user WHERE id=?";
+            PreparedStatement stmt = Database.executePrepareStmt(sql);
+            stmt.setInt(1, idUser);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                String nama = rs.getString("nama");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+//                String role = rs.getString("role");
+                jTextField1.setText(nama);
+                jTextField2.setText(email);
+                jPasswordField1.setText(password);
+                
+            }
+        } catch (Exception e) {
+            System.out.println("Error Full Fill Data :" + e.getMessage());
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;

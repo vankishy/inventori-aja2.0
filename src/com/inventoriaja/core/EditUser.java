@@ -4,15 +4,23 @@
  */
 package com.inventoriaja.core;
 import java.sql.*;
-import javax.swing.JOptionPane; 
 import com.inventoriaja.model.User;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author Aaron
  */
-public class EditUser {    
-    public static User getUser(int id){
-        String sql = "SELECT * FROM users WHERE id=?";
+
+public class EditUser { 
+    
+    public static User getIDuser(User user) {
+        return getUserbyID(user.getId());
+    }
+    
+    public static User getUserbyID(int id) {
+        
+        String sql = "SELECT * FROM user WHERE id=?";
         try {
             PreparedStatement stmt = Database.executePrepareStmt(sql);
             stmt.setInt(1, id);
@@ -23,41 +31,31 @@ public class EditUser {
                 String email = rs.getString("email");
                 String password = rs.getString("password");
                 String role = rs.getString("role");
-                String createdAt = rs.getString("created_at");
-                
-                User user = new User(idUser, nama, email, password, role, createdAt);
+                User user = new User(idUser, nama, email, password, role, "");
                 return user;
             }
         } catch (SQLException e) {
-            System.out.println("Error Get user Id:" + e.getMessage());
+            System.out.println("Error Get Cabang Id:" + e.getMessage());
         }
         return null;
     }
     
-    public static void updateUser(String nama, String email, String password, String role){
+    public static boolean updateUser(int id, String nama, String email, String password, String role) {
+        String sql = "UPDATE user SET nama = ?, email = ?, password = ?, role = ? WHERE id = ?";
         try {
-            // Koneksi ke database
-            Connection conn = DriverManager.getConnection("jdbc:mysql://103.161.184.223/inventoriaja", "inventoriaja", "inventoriaja");
-            String sql = "UPDATE users SET nama =?, email =?, password =?, role =? WHERE id =?";
-            PreparedStatement pst = conn.prepareStatement(sql);
-            pst.setString(1, nama);
-            pst.setString(2, email);
-            pst.setString(3, password);
-            pst.setString(4, role);
-//            pst.setInt(5, id);
-
-            int affectedRows = pst.executeUpdate();
-            if (affectedRows > 0) {
-                JOptionPane.showMessageDialog(null, "User berhasil diupdate.", "Sukses", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(null, "User tidak ditemukan.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-
-            pst.close();
-            conn.close();
+            PreparedStatement stmt = Database.executePrepareStmt(sql);
+            
+            stmt.setString(1, nama);
+            stmt.setString(2, email);
+            stmt.setString(3, password);
+            stmt.setString(4, role);
+            stmt.setInt(5, id);
+            stmt.executeUpdate();
+            
+            return true;
         } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Terjadi kesalahan saat mengupdate data.", "Error", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(CabangQuery.class.getName()).log(Level.SEVERE, "Error updating data", e);
         }
+        return false;
     }
 }

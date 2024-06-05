@@ -9,6 +9,7 @@ import com.inventoriaja.core.Database;
 import com.inventoriaja.core.EditBarang;
 import com.inventoriaja.core.DeleteTransaksi;
 import com.inventoriaja.core.DeleteUser;
+import com.inventoriaja.core.EditUser;
 import com.inventoriaja.model.Barang;
 import com.inventoriaja.model.Cabang;
 import com.inventoriaja.model.Transaksi;
@@ -994,14 +995,19 @@ public class MainFrame extends javax.swing.JFrame {
     private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
         // TODO add your handling code here:
         // EDIT BUTTON
-        int row = jTable3.getSelectedRow();
+        
         int column = jTable3.getSelectedColumn();
+        int row = jTable3.getSelectedRow();
+        System.out.println("column: " + column);
+        System.out.println("row: " + row);
         String value = jTable3.getModel().getValueAt(row, column).toString();
+        System.out.println(value);
+        EditUserFrame frame = new EditUserFrame(Integer.parseInt(value));
+        User user = EditUser.getUserbyID(Integer.parseInt(value));
+        if (user != null) {
+            frame.setVisible(true);
+        }
         
-        EditUserFrame editUser = new EditUserFrame(value);
-        
-        editUser.setDefaultCloseOperation(javax.swing.JFrame.DISPOSE_ON_CLOSE);
-        editUser.setVisible(true);
     }//GEN-LAST:event_jButton14ActionPerformed
 
     private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
