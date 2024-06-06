@@ -12,11 +12,7 @@ import java.util.logging.Logger;
  * @author Aaron
  */
 
-public class EditUser { 
-    
-    public static User getIDuser(User user) {
-        return getUserbyID(user.getId());
-    }
+public class EditUser {
     
     public static User getUserbyID(int id) {
         
@@ -35,7 +31,7 @@ public class EditUser {
                 return user;
             }
         } catch (SQLException e) {
-            System.out.println("Error Get Cabang Id:" + e.getMessage());
+            System.out.println("Error Get User Id:" + e.getMessage());
         }
         return null;
     }
@@ -57,5 +53,25 @@ public class EditUser {
             Logger.getLogger(CabangQuery.class.getName()).log(Level.SEVERE, "Error updating data", e);
         }
         return false;
+    }
+    
+    public static User getUserbyName(String nama) {
+        String sql = "SELECT * FROM user WHERE nama=?";
+        try {
+            PreparedStatement stmt = Database.executePrepareStmt(sql);
+            stmt.setString(1, nama);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                int idUser = rs.getInt("id");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                String role = rs.getString("role");
+                User user = new User(idUser, nama, email, password, role, "");
+                return user;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error Get User Name:" + e.getMessage());
+        }
+        return null;
     }
 }

@@ -7,8 +7,15 @@ package com.inventoriaja.frame;
 import com.inventoriaja.core.Database;
 import com.inventoriaja.core.EditUser;
 import com.inventoriaja.core.SwingHelper;
+import com.inventoriaja.model.Barang;
+import com.inventoriaja.model.User;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -18,16 +25,25 @@ import javax.swing.JOptionPane;
  */
 public class EditUserFrame extends javax.swing.JFrame {
 
+    private Database database;
+    
+    ArrayList<User> user = new ArrayList<User>();
+    
+    public User User;
+    public int userId;
+    private String val;
+    
     /**
      * Creates new form EditUserFrame
      */
-    private int idUser;
-    public EditUserFrame(int id) {
+    
+    public EditUserFrame(String val) throws SQLException{
         initComponents();
-        setTitle("Edit barang");
-        this.idUser = id;
+        setTitle("Edit User");
+        this.val = val;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         fullFillData();
+        
     }
 
     /**
@@ -164,19 +180,65 @@ public class EditUserFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
-        String nama = jTextField1.getText();
-        String email = jTextField2.getText();
-        String password = jPasswordField1.getSelectedText();
-        String role = SwingHelper.getSelectedButtonText(buttonGroup1);
-        boolean status = EditUser.updateUser(idUser, nama, email, password, role);
-        
-        if (status) {
-            JOptionPane.showMessageDialog(this, "Berhasil");
-        } else {
-            JOptionPane.showMessageDialog(this, "Gagal");
+  
+        try {
+            String nama = jTextField1.getText();
+            String email = jTextField2.getText();
+            String password = new String(jPasswordField1.getPassword()); // Use getPassword() instead of getSelectedText()
+            String role = SwingHelper.getSelectedButtonText(buttonGroup1);
+            
+            PreparedStatement stmt = Database.executePrepareStmt("UPDATE user SET nama =?, email =?, password =?, role =? WHERE createdAt =?;");
+//            PreparedStatement stmt = Database.executePrepareStmt("UPDATE user SET nama =?, email =?, password =?, role =? WHERE userId =?;");
+//            PreparedStatement stmt = Database.executePrepareStmt("UPDATE user SET nama =?, email =?, password =?, role =? WHERE createdAt = '"+val+"';");
+            
+            stmt.setString(1, nama);
+            stmt.setString(2, email);
+            stmt.setString(3, password);
+            stmt.setString(4, role);
+            stmt.setString(5, val); // Set the createdAt parameter
+            stmt.executeUpdate();
+
+//            stmt.setString(1, nama);
+//            stmt.setString(2, email);
+//            stmt.setString(3, password);
+//            stmt.setString(4, role);
+//            stmt.setInt(5, userId); // Set the userId parameter
+//            stmt.executeUpdate();
+
+            JOptionPane.showMessageDialog(null, "User telah di update", "Berhasil", JOptionPane.WARNING_MESSAGE);
+            stmt.close();
+            this.setVisible(false);
+        } catch (SQLException ex) {
+            Logger.getLogger(EditUserFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.dispose();  
+        
+//        try {
+//            String nama = jTextField1.getText();
+//            String email = jTextField2.getText();
+//            String password = new String(jPasswordField1.getPassword()); // Use getPassword() instead of getSelectedText()
+//            String role = SwingHelper.getSelectedButtonText(buttonGroup1);
+//
+//            if (EditUser.getUserbyName(nama)!= null) {
+//                int userId = EditUser.getUserbyName(nama).getId(); // Get the user ID from the existing user object
+//
+//                PreparedStatement stmt = Database.executePrepareStmt("UPDATE user SET nama =?, email =?, password =?, role =? WHERE id =?");
+//                stmt.setString(1, nama);
+//                stmt.setString(2, email);
+//                stmt.setString(3, password);
+//                stmt.setString(4, role);
+//                stmt.setInt(5, userId);
+//                stmt.executeUpdate();
+//
+//                JOptionPane.showMessageDialog(null, "User telah di update", "Berhasil", JOptionPane.WARNING_MESSAGE);
+//                stmt.close();
+//                this.setVisible(false);
+//            } else {
+//                JOptionPane.showMessageDialog(null, "User not found!");
+//            }
+//        } catch (SQLException ex) {
+//            JOptionPane.showMessageDialog(null, "Error updating user: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+//            Logger.getLogger(TambahUserFrame.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -228,24 +290,75 @@ public class EditUserFrame extends javax.swing.JFrame {
 //    }
     
     private void fullFillData() {
-        try {
-            String sql = "SELECT * FROM user WHERE id=?";
-            PreparedStatement stmt = Database.executePrepareStmt(sql);
-            stmt.setInt(1, idUser);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                String nama = rs.getString("nama");
-                String email = rs.getString("email");
-                String password = rs.getString("password");
-//                String role = rs.getString("role");
-                jTextField1.setText(nama);
-                jTextField2.setText(email);
-                jPasswordField1.setText(password);
-                
+        
+//        try {
+//            PreparedStatement stmt = Database.executePrepareStmt("SELECT barang_id FROM transaksi WHERE createdAt = '" + val + "';");
+//            ResultSet rs = stmt.executeQuery();
+//            if (rs.next()) {
+//                PreparedStatement stmt2 = Database.executePrepareStmt("SELECT b.nama, t.stok, t.tipe FROM transaksi t "
+//                        + "JOIN barang b ON t.barang_id = b.id "
+//                        + "WHERE b.id = '" + rs.getInt("barang_id") + "' AND t.createdAt = '" + val + "';");
+//                ResultSet rs2 = stmt2.executeQuery();
+//                if (rs2.next()) {
+//                    String barang = rs2.getString("nama");
+//                    int stok = rs2.getInt("stok");
+//                    String tipe = rs2.getString("tipe");
+//                    model.setSelectedItem(barang);
+//                    jSpinner2.setValue(stok);
+//                    
+//                    if (tipe.equals("masuk")) {
+//                        jRadioButton1.setSelected(true);
+//                        jRadioButton2.setSelected(false);
+//                    } else if (tipe.equals("keluar")) {
+//                        jRadioButton2.setSelected(true);
+//                        jRadioButton1.setSelected(false);
+//                    }
+//                }
+//                rs2.close();
+//            }
+//            rs.close();
+//        } catch (SQLException ex) {
+//            System.out.println(ex.getMessage());
+//        }
+
+
+        try (PreparedStatement stmt = Database.executePrepareStmt("SELECT nama, email, password, role FROM user WHERE createdAt =?;")) {
+            stmt.setString(1, val);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    String nama = rs.getString("nama");
+                    String email = rs.getString("email");
+                    String password = rs.getString("password");
+                    String role = rs.getString("role");
+                    // Use the retrieved values here
+                } else {
+                    System.out.println("No user found with createdAt = " + val);
+                }
             }
-        } catch (Exception e) {
-            System.out.println("Error Full Fill Data :" + e.getMessage());
-        }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }          
+
+
+//        try { 
+//            PreparedStatement stmt = Database.executePrepareStmt("SELECT id FROM user WHERE createdAt = '" + val + "';");
+//            ResultSet rs = stmt.executeQuery();
+//            if (rs.next()) {
+//                PreparedStatement stmt2 = Database.executePrepareStmt("SELECT nama, email, password, role FROM user "
+//                        + "WHERE id = '" + rs.getInt("id") + "' AND createdAt = '" + val + "';");
+//                ResultSet rs2 = stmt2.executeQuery();
+//                if (rs2.next()) {
+//                    String nama = rs2.getString("nama");
+//                    String email = rs2.getString("email");
+//                    String password = rs2.getString("password");
+//                    String role = rs2.getString("role");
+//                }
+//                rs2.close();
+//            }
+//            rs.close();
+//        } catch (SQLException ex) {
+//            System.out.println(ex.getMessage());
+//        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

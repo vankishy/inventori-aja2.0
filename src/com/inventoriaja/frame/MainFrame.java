@@ -993,19 +993,19 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton13ActionPerformed
 
     private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
-        // TODO add your handling code here:
-        // EDIT BUTTON
+
+        // edit user
         
         int column = jTable3.getSelectedColumn();
         int row = jTable3.getSelectedRow();
-        System.out.println("column: " + column);
-        System.out.println("row: " + row);
         String value = jTable3.getModel().getValueAt(row, column).toString();
-        System.out.println(value);
-        EditUserFrame frame = new EditUserFrame(Integer.parseInt(value));
-        User user = EditUser.getUserbyID(Integer.parseInt(value));
-        if (user != null) {
-            frame.setVisible(true);
+
+        try {
+            var frameEdit = new EditUserFrame(value);
+            frameEdit.User = currentUser;
+            frameEdit.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }//GEN-LAST:event_jButton14ActionPerformed
@@ -1041,6 +1041,9 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton20ActionPerformed
 
     private void jButton21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton21ActionPerformed
+        
+        // edit transaksi
+        
         int column = jTable5.getSelectedColumn();
         int row = jTable5.getSelectedRow();
         String value = jTable5.getModel().getValueAt(row, column).toString();
