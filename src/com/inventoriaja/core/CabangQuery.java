@@ -10,6 +10,10 @@ import java.sql.*;
 import com.inventoriaja.model.Cabang;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -67,5 +71,32 @@ public class CabangQuery {
             Logger.getLogger(CabangQuery.class.getName()).log(Level.SEVERE, "Error updating data", e);
         }
         return false;
+    }
+    
+    public static void searchCabang(String query, JLabel label, JTable table, JFrame frame) {
+        String sql = query;
+        try {
+            ResultSet rs = Database.executeQuery(sql);
+            DefaultTableModel model = (DefaultTableModel)table.getModel();
+            model.setRowCount(0);
+            
+            if (rs.isBeforeFirst()) {
+                while(rs.next()) {
+                    Object cabangObj[] = {
+                        rs.getInt("id"),
+                        rs.getString("nama"),
+                        rs.getString("alamat"),
+                        rs.getString("nohp"),
+                        rs.getString("createdAt")
+                    };
+                    model.addRow(cabangObj);
+                    label.setText("No Record Found!");
+                }
+            } else {
+                label.setText("No Record Found!");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(frame, "Error: " + e.getMessage());
+        }
     }
 }
