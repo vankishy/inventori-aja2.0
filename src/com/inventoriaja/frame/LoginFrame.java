@@ -181,6 +181,8 @@ public class LoginFrame extends javax.swing.JFrame {
             String password = new String(jPasswordField1.getPassword());
             
             String sql = "SELECT * FROM user WHERE email = '" + email + "' AND password = '" + password + "'";
+            
+            System.out.println(sql);
             ResultSet result = Database.executeQuery(sql);
             
             if(result.next()) {
