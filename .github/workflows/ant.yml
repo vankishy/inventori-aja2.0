@@ -1,0 +1,53 @@
+# This workflow will build a Java project with Ant
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-ant
+name: Java CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+    
+    - name: Download AbsoluteLayout
+      run: |
+        mkdir -p lib
+        # Option 1: Download dari Maven Central
+        curl -L "https://repo1.maven.org/maven2/org/netbeans/external/AbsoluteLayout/RELEASE170/AbsoluteLayout-RELEASE170.jar" -o "lib/AbsoluteLayout.jar"
+        # Verifikasi file JAR
+        ls -la lib/AbsoluteLayout.jar
+        echo "File size: $(stat -c%s lib/AbsoluteLayout.jar) bytes"
+    
+    - name: Update project properties
+      run: |
+        # Buat atau update file project.properties
+        if grep -q "file.reference.AbsoluteLayout.jar" nbproject/project.properties; then
+          # Update existing reference
+          sed -i 's|file.reference.AbsoluteLayout.jar=.*|file.reference.AbsoluteLayout.jar=lib/AbsoluteLayout.jar|g' nbproject/project.properties
+        else
+          # Add new reference
+          echo "file.reference.AbsoluteLayout.jar=lib/AbsoluteLayout.jar" >> nbproject/project.properties
+          # Ensure it's in the classpath
+          if grep -q "javac.classpath=" nbproject/project.properties; then
+            sed -i 's|javac.classpath=\\|javac.classpath=\\${file.reference.AbsoluteLayout.jar}:\\|g' nbproject/project.properties
+          else
+            echo "javac.classpath=\${file.reference.AbsoluteLayout.jar}" >> nbproject/project.properties
+          fi
+        fi
+        # Show modified properties
+        cat nbproject/project.properties | grep -A10 "javac.classpath"
+    
+    - name: Build with Ant
+      run: ant -noinput -buildfile build.xml
