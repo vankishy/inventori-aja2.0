@@ -23,11 +23,40 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
     
-    - name: Download AbsoluteLayout.jar
+    - name: Install NetBeans Libraries
       run: |
-        curl -L "https://repo1.maven.org/maven2/org/netbeans/external/AbsoluteLayout/RELEASE184/AbsoluteLayout-RELEASE184.jar" -o "AbsoluteLayout.jar"
-        echo "Downloaded AbsoluteLayout.jar"
-        ls -la AbsoluteLayout.jar
+        # Create lib directory if it doesn't exist
+        mkdir -p lib
+        
+        # Download and extract NetBeans Platform
+        wget -q https://downloads.apache.org/netbeans/netbeans/17/netbeans-17-bin.zip -O netbeans.zip
+        unzip -q netbeans.zip
+        
+        # Copy AbsoluteLayout.jar from NetBeans distribution
+        find ./netbeans -name "AbsoluteLayout.jar" -exec cp {} ./lib/ \;
+        
+        # Verify AbsoluteLayout.jar
+        ls -la lib/AbsoluteLayout.jar
+        echo "File size: $(stat -c%s lib/AbsoluteLayout.jar) bytes"
+    
+    - name: Update project.properties
+      run: |
+        # Update project.properties to use the new location
+        if grep -q "file.reference.AbsoluteLayout.jar" nbproject/project.properties; then
+          # Update existing reference
+          sed -i 's|file.reference.AbsoluteLayout.jar=.*|file.reference.AbsoluteLayout.jar=lib/AbsoluteLayout.jar|g' nbproject/project.properties
+        else
+          # Add new reference
+          echo "file.reference.AbsoluteLayout.jar=lib/AbsoluteLayout.jar" >> nbproject/project.properties
+          # Ensure it's in the classpath
+          if grep -q "javac.classpath=" nbproject/project.properties; then
+            sed -i 's|javac.classpath=\\|javac.classpath=\\${file.reference.AbsoluteLayout.jar}:\\|g' nbproject/project.properties
+          else
+            echo "javac.classpath=\${file.reference.AbsoluteLayout.jar}" >> nbproject/project.properties
+          fi
+        fi
+        # Show modified properties
+        cat nbproject/project.properties | grep -A10 "javac.classpath"
     
     - name: Build with Ant
       run: ant -noinput -buildfile build.xml
