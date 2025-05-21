@@ -1,0 +1,33 @@
+# This workflow will build a Java project with Ant
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-ant
+
+name: Java CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+  
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+    
+    - name: Download AbsoluteLayout.jar
+      run: |
+        curl -L "https://repo1.maven.org/maven2/org/netbeans/external/AbsoluteLayout/RELEASE184/AbsoluteLayout-RELEASE184.jar" -o "AbsoluteLayout.jar"
+        echo "Downloaded AbsoluteLayout.jar"
+        ls -la AbsoluteLayout.jar
+    
+    - name: Build with Ant
+      run: ant -noinput -buildfile build.xml
