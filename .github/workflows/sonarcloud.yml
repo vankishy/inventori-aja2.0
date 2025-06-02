@@ -9,40 +9,31 @@ on:
       - main
 
 jobs:
-  sonarcloud:
+  build:
     name: SonarCloud
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Java
+      - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
-
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v2
-        with:
-          entryPoint: "./path/to/entry/point" # Adjust path as needed
-          args: "--some-argument"            # Provide appropriate arguments
-          projectBaseDir: "./"               # Set the base directory for scanning
 
       - name: Cache SonarCloud packages
         uses: actions/cache@v3
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
-          restore-keys: |
-            ${{ runner.os }}-sonar
-            ${{ runner.os }}
-          fail-on-cache-miss: false
+          restore-keys: ${{ runner.os }}-sonar
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         with:
-          organization: 123key
-          projectKey: aaronjospeh_inventori-aja2.0
-          token: ${{ secrets.SONAR_TOKEN }}
+          projectBaseDir: .
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_PROJECT_KEY: aaronjospeh_inventori-aja2.0
+          SONAR_ORGANIZATION: 123key
