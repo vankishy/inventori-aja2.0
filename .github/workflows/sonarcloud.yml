@@ -28,7 +28,10 @@ jobs:
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
+          restore-keys: |
+            ${{ runner.os }}-sonar
+            ${{ runner.os }}
+          fail-on-cache-miss: true
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
