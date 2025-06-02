@@ -23,6 +23,13 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        with:
+          entryPoint: "./path/to/entry/point" # Adjust path as needed
+          args: "--some-argument"            # Provide appropriate arguments
+          projectBaseDir: "./"               # Set the base directory for scanning
+
       - name: Cache SonarCloud packages
         uses: actions/cache@v3
         with:
@@ -31,7 +38,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-sonar
             ${{ runner.os }}
-          fail-on-cache-miss: true
+          fail-on-cache-miss: false
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
