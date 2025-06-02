@@ -11,41 +11,32 @@
 # For more information on Codacy Analysis CLI in general, see
 # https://github.com/codacy/codacy-analysis-cli.
 
-name: Codacy Security Scan
+name: Codacy Analysis
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
   pull_request:
-    # The branches below must be a subset of the branches above
-    branches: [ "main" ]
-  schedule:
-    - cron: '43 0 * * 5'
-
-permissions:
-  contents: read
+    branches: [ main ]
 
 jobs:
-  codacy-security-scan:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Compile Code
-        run: |
-          ./gradlew build
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
 
-      - name: Run Codacy Analysis CLI
-        uses: codacy/codacy-analysis-cli-action@d840f886c4bd4edc059706d09c6a1586111c540b
-        with:
-          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          verbose: true
-          output: results.sarif
-          format: sarif
-          max-allowed-issues: 2147483647
+    - name: Build project with Maven
+      run: mvn clean verify
 
-      - name: Upload SARIF results file
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: results.sarif
+    - name: Run Codacy Analysis CLI
+      uses: codacy/codacy-analysis-cli-action@v4
+      with:
+        project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
