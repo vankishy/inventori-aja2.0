@@ -20,23 +20,14 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  codacy-analysis:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'temurin'
-        java-version: '17'
-
-    - name: Build project with Maven
-      run: mvn clean verify
-
-    - name: Run Codacy Analysis CLI
-      uses: codacy/codacy-analysis-cli-action@v4
-      with:
-        project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+      - name: Run Codacy Analysis CLI
+        uses: codacy/codacy-analysis-cli-action@v4
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
