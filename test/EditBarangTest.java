@@ -1,5 +1,3 @@
-package com.inventoriaja.core.test;
-
 import com.inventoriaja.core.EditBarang;
 import com.inventoriaja.model.Barang;
 import org.junit.Ignore;

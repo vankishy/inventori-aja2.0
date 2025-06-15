@@ -1,5 +1,3 @@
-package com.inventoriaja.core.test;
-
 import com.inventoriaja.core.EditUser;
 import com.inventoriaja.model.User;
 import org.junit.Ignore;

@@ -1,5 +1,3 @@
-package com.inventoriaja.core.test;
-
 import com.inventoriaja.core.Database;
 import org.junit.Test;
 import static org.junit.Assert.*;

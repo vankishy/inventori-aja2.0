@@ -1,5 +1,3 @@
-package com.inventoriaja.core.test;
-
 import com.inventoriaja.core.SwingHelper;
 import javax.swing.ButtonGroup;
 import javax.swing.JRadioButton;

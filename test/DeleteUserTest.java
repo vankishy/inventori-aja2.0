@@ -1,5 +1,3 @@
-package com.inventoriaja.core.test;
-
 import com.inventoriaja.core.DeleteUser;
 import org.junit.Test;
 import static org.junit.Assert.*;
